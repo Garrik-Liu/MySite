@@ -1,17 +1,19 @@
-var express = require('express');
-var app = express();
+var http = require('http');
 
-app.use(express.static('public'));
-
-app.get('/', function(req, res) {
-    res.sendFile(__dirname + "/public/html" + "/index.html");
-})
-
-var server = app.listen(3000, function() {
-
-    var host = server.address().address
-    var port = server.address().port
-
-    console.log("应用实例，访问地址为 http://%s:%s", host, port)
-
-})
+http.createServer(function(req, res) {
+    var path = req.url.replace(/\/?(?:\?.*)?$/, '').toLowerCase();
+    switch (path) {
+        case '':
+            res.writeHead(200, { 'Content-Type': 'text/plain' });
+            res.end('HomePage');
+            break;
+        case '/about':
+            res.writeHead(200, { 'Content-Type': 'text/plain' });
+            res.end('About');
+            break;
+        default:
+            res.writeHead(404, { 'Content-Type': 'text/plain' });
+            res.end('Not Found');
+            break;
+    }
+}).listen(3000);
